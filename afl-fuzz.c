@@ -8032,6 +8032,7 @@ int main(int argc, char** argv) {
   // TODO SET THIS AS AN ENVIRONMENT VARIABLE IN THE FUTURE! I HAVE JUST PUT
   // THIS HERE FOR CONVIENENCE
   afl->rl_params = rl_init_params(afl->fsrv.map_size);
+  SAYF("Compiled with RL fuzzing.\n");
 #endif
 
   if (getenv("AFL_NO_FORKSRV"))    no_forkserver    = 1;

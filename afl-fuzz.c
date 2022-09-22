@@ -7165,6 +7165,11 @@ static void usage(u8* argv0) {
 
        argv0, EXEC_TIMEOUT, MEM_LIMIT, doc_path);
 
+
+#ifdef RL_FUZZING
+  SAYF("Compiled with RL fuzzing.\n");
+#endif
+
   exit(1);
 
 }

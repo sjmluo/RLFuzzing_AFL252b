@@ -67,6 +67,14 @@
 #include <sys/ioctl.h>
 #include <sys/file.h>
 
+/* Start RL fuzzing */
+
+#ifdef RL_FUZZING
+#include "afl-fuzz-rl.h"
+#endif
+
+/* End RL fuzzing */
+
 #if defined(__APPLE__) || defined(__FreeBSD__) || defined (__OpenBSD__)
 #  include <sys/sysctl.h>
 #endif /* __APPLE__ || __FreeBSD__ || __OpenBSD__ */
@@ -2660,6 +2668,12 @@ static u8 calibrate_case(char** argv, struct queue_entry* q, u8* use_mem,
         q->exec_cksum = cksum;
         memcpy(first_trace, trace_bits, MAP_SIZE);
 
+#ifdef RL_FUZZING
+        afl->rl_params->trace_bits = afl->fsrv.trace_bits;
+        afl->rl_params->map_size = afl->fsrv.map_size;
+        rl_store_features(afl->rl_params);
+#endif
+
       }
 
     }
@@ -3196,6 +3210,13 @@ static u8 save_if_interesting(char** argv, void* mem, u32 len, u8 fault) {
     }
 
     queue_top->exec_cksum = hash32(trace_bits, MAP_SIZE, HASH_CONST);
+
+#ifdef RL_FUZZING
+    afl->rl_params->trace_bits = afl->fsrv.trace_bits;
+    afl->rl_params->map_size = afl->fsrv.map_size;
+    rl_store_features(afl->rl_params);
+#endif
+
 
     /* Try to calibrate inline; this also calls update_bitmap_score() when
        successful. */
@@ -8002,6 +8023,11 @@ int main(int argc, char** argv) {
     if (qemu_mode)  FATAL("-Q and -n are mutually exclusive");
 
   }
+#ifdef RL_FUZZING
+  // TODO SET THIS AS AN ENVIRONMENT VARIABLE IN THE FUTURE! I HAVE JUST PUT
+  // THIS HERE FOR CONVIENENCE
+  afl->rl_params = rl_init_params(afl->fsrv.map_size);
+#endif
 
   if (getenv("AFL_NO_FORKSRV"))    no_forkserver    = 1;
   if (getenv("AFL_NO_CPU_RED"))    no_cpu_meter_red = 1;

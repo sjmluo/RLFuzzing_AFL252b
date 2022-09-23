@@ -506,7 +506,7 @@ void rl_store_features(rl_params_t *rl_params) {
   }
 }
 
-void get_id(struct queue_entry *queue, truct queue_entry *queue_cur) {
+int get_id(struct queue_entry *queue, struct queue_entry *queue_cur) {
   struct queue_entry *tmp;
   tmp = queue;
   int current_entry = 0;
@@ -514,7 +514,7 @@ void get_id(struct queue_entry *queue, truct queue_entry *queue_cur) {
     current_entry++;
     tmp = tmp->next;
   }
-  return current_entry
+  return current_entry;
 
 }
 

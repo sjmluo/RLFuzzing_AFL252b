@@ -344,6 +344,10 @@ enum {
   /* 05 */ FAULT_NOBITS
 };
 
+#ifdef RL_FUZZING
+  rl_params_t *rl_params;
+#endif
+
 
 /* Get unix time in milliseconds */
 
@@ -2669,9 +2673,9 @@ static u8 calibrate_case(char** argv, struct queue_entry* q, u8* use_mem,
         memcpy(first_trace, trace_bits, MAP_SIZE);
 
 #ifdef RL_FUZZING
-        afl->rl_params->trace_bits = afl->fsrv.trace_bits;
-        afl->rl_params->map_size = afl->fsrv.map_size;
-        rl_store_features(afl->rl_params);
+        rl_params->trace_bits = trace_bits;
+        rl_params->map_size = MAP_SIZE;
+        rl_store_features(rl_params);
 #endif
 
       }
@@ -3212,9 +3216,9 @@ static u8 save_if_interesting(char** argv, void* mem, u32 len, u8 fault) {
     queue_top->exec_cksum = hash32(trace_bits, MAP_SIZE, HASH_CONST);
 
 #ifdef RL_FUZZING
-    afl->rl_params->trace_bits = afl->fsrv.trace_bits;
-    afl->rl_params->map_size = afl->fsrv.map_size;
-    rl_store_features(afl->rl_params);
+    rl_params->trace_bits = trace_bits;
+    rl_params->map_size = MAP_SIZE;
+    rl_store_features(rl_params);
 #endif
 
 
@@ -8031,7 +8035,7 @@ int main(int argc, char** argv) {
 #ifdef RL_FUZZING
   // TODO SET THIS AS AN ENVIRONMENT VARIABLE IN THE FUTURE! I HAVE JUST PUT
   // THIS HERE FOR CONVIENENCE
-  afl->rl_params = rl_init_params(afl->fsrv.map_size);
+  rl_params = rl_init_params(MAP_SIZE);
   SAYF("Compiled with RL fuzzing.\n");
 #endif
 
@@ -8123,7 +8127,7 @@ int main(int argc, char** argv) {
 #ifdef RL_FUZZING
   // TODO SET THIS AS AN ENVIRONMENT VARIABLE IN THE FUTURE! I HAVE JUST PUT
   // THIS HERE FOR CONVIENENCE
-  afl->rl_params = rl_init_params(afl->fsrv.map_size);
+  rl_params = rl_init_params(MAP_SIZE);
 #endif
 
 
@@ -8132,23 +8136,23 @@ int main(int argc, char** argv) {
     u8 skipped_fuzz;
 
 #ifdef RL_FUZZING
-    if (unlikely(afl->rl_params->map_size != afl->fsrv.map_size)) {
-      afl->rl_params->map_size = afl->fsrv.map_size;
+    if (unlikely(rl_params->map_size != MAP_SIZE)) {
+      rl_params->map_size = MAP_SIZE;
 #ifdef PYHTON_RL
-      rl_update_map_size(afl->rl_params);
+      rl_update_map_size(rl_params);
 #endif
     }
 
-    afl->rl_params->queue_cur = afl->queue_cur;
-    afl->rl_params->top_rated = afl->top_rated;
-    rl_update_queue(afl->rl_params);
-    afl->current_entry = afl->rl_params->current_entry;
+    rl_params->queue_cur = queue_cur;
+    rl_params->top_rated = top_rated;
+    rl_update_queue(rl_params);
+    current_entry = rl_params->current_entry;
 
     OKF("Modifying queue with RL\n");
-    afl->queue_cur = afl->top_rated[(int) afl->current_entry];
-    if (afl->queue_cur) {
-      OKF("Setting queue_cur to %d", afl->queue_cur->id);
-      afl->current_entry = afl->queue_cur->id;
+    queue_cur = top_rated[(int) current_entry];
+    if (queue_cur) {
+      OKF("Setting queue_cur to %d", queue_cur->id);
+      current_entry = queue_cur->id;
     }
 
 #else

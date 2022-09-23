@@ -70,9 +70,9 @@
 
 /* Start RL fuzzing */
 
-#ifdef RL_FUZZING
+// #ifdef RL_FUZZING
 #include "afl-fuzz-rl.h"
-#endif
+// #endif
 
 /* End RL fuzzing */
 

@@ -27,6 +27,7 @@
    how they affect the execution path.
 
 */
+#define RL_FUZZING 1
 
 #define AFL_MAIN
 #include "android-ashmem.h"

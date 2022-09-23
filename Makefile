@@ -61,6 +61,22 @@ test_x86:
 
 endif
 
+
+ifdef PY_RL_FUZZING
+	$(info Building Python RL fuzzer)
+	RL_FUZZING=1
+	override CFLAGS += -DRL_USE_PYTHON
+	override CXXFLAGS += -DRL_USE_PYTHON
+endif
+
+ifdef RL_FUZZING
+	$(info Building RL fuzzer)
+	override CFLAGS += -DRL_FUZZING
+	override CXXFLAGS += -DRL_FUZZING
+	override LDFLAGS += -lstdc++
+	override AFL_FUZZ_FILES += src/rl-fuzzing.o
+endif
+
 afl-gcc: afl-gcc.c $(COMM_HDR) | test_x86
 	$(CC) $(CFLAGS) $@.c -o $@ $(LDFLAGS)
 	set -e; for i in afl-g++ afl-clang afl-clang++; do ln -sf afl-gcc $$i; done
@@ -83,6 +99,11 @@ afl-analyze: afl-analyze.c $(COMM_HDR) | test_x86
 
 afl-gotcpu: afl-gotcpu.c $(COMM_HDR) | test_x86
 	$(CC) $(CFLAGS) $@.c -o $@ $(LDFLAGS)
+
+ifdef RL_FUZZING
+src/rl-fuzzing.o : $(COMM_HDR) src/rl-fuzzing.cpp
+	$(CXX) $(CXXFLAGS) $(CXXFLAGS_FLTO) -c src/rl-fuzzing.cpp -o src/rl-fuzzing.o
+endif
 
 ifndef AFL_NO_X86
 

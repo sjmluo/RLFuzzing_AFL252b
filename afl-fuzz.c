@@ -506,6 +506,18 @@ void rl_store_features(rl_params_t *rl_params) {
   }
 }
 
+void get_id(struct queue_entry *queue, truct queue_entry *queue_cur) {
+  struct queue_entry *tmp;
+  tmp = queue;
+  int current_entry = 0;
+  while(tmp!=queue) {
+    current_entry++;
+    tmp = tmp->next;
+  }
+  return current_entry
+
+}
+
 void rl_update_queue(rl_params_t *rl_params) {
   u32 best_bit;
 
@@ -572,9 +584,9 @@ void rl_update_queue(rl_params_t *rl_params) {
 
   rl_params->current_entry = best_bit;
   rl_params->queue_cur = rl_params->top_rated[(int)rl_params->current_entry];
-  // if (likely(rl_params->queue_cur)) {
-  //   rl_params->current_entry = rl_params->queue_cur->id;
-  // }
+  if (likely(rl_params->queue_cur)) {
+    rl_params->current_entry = get_id(queue, rl_params->queue_cur);
+  }
 }
 
 

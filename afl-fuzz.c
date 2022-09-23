@@ -8151,10 +8151,10 @@ int main(int argc, char** argv) {
 
     OKF("Modifying queue with RL\n");
     queue_cur = top_rated[(int) current_entry];
-    if (queue_cur) {
-      OKF("Setting queue_cur to %d", queue_cur->id);
-      current_entry = queue_cur->id;
-    }
+    // if (queue_cur) {
+    //   OKF("Setting queue_cur to %d", queue_cur->id);
+    //   current_entry = queue_cur->id;
+    // }
 
 #else
     cull_queue();

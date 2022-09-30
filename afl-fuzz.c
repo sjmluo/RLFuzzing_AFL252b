@@ -506,17 +506,6 @@ void rl_store_features(rl_params_t *rl_params) {
   }
 }
 
-int get_id(struct queue_entry *queue, struct queue_entry *queue_cur) {
-  struct queue_entry *tmp;
-  tmp = queue;
-  int current_entry = 0;
-  while(tmp!=queue) {
-    current_entry++;
-    tmp = tmp->next;
-  }
-  return current_entry;
-
-}
 
 void rl_update_queue(rl_params_t *rl_params) {
   u32 best_bit;
@@ -584,9 +573,9 @@ void rl_update_queue(rl_params_t *rl_params) {
 
   rl_params->current_entry = best_bit;
   rl_params->queue_cur = rl_params->top_rated[(int)rl_params->current_entry];
-  if (likely(rl_params->queue_cur)) {
-    rl_params->current_entry = get_id(queue, rl_params->queue_cur);
-  }
+  // if (likely(rl_params->queue_cur)) {
+  //   rl_params->current_entry = rl_params->queue_cur->id;
+  // }
 }
 
 
@@ -8407,6 +8396,13 @@ int main(int argc, char** argv) {
 
     OKF("Modifying queue with RL\n");
     queue_cur = top_rated[(int) current_entry];
+    queue_cur = queue;
+    current_entry = 0;
+    cur_skipped_paths = 0;
+    while(queue_cur != rl_params->queue_cur) {
+      queue_cur = queue_cur->next;
+      current_entry++;
+    }
     // if (queue_cur) {
     //   OKF("Setting queue_cur to %d", queue_cur->id);
     //   current_entry = queue_cur->id;

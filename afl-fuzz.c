@@ -8402,6 +8402,9 @@ int main(int argc, char** argv) {
     while(queue_cur != rl_params->queue_cur) {
       queue_cur = queue_cur->next;
       current_entry++;
+      if(!queue_cur) {
+        break;
+      }
     }
     // if (queue_cur) {
     //   OKF("Setting queue_cur to %d", queue_cur->id);

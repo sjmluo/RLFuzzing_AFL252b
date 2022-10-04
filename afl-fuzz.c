@@ -8401,6 +8401,7 @@ int main(int argc, char** argv) {
     cur_skipped_paths = 0;
     while(queue_cur != rl_params->queue_cur) {
       queue_cur = queue_cur->next;
+      queue_cycle++;
       current_entry++;
       if(!queue_cur) {
         break;

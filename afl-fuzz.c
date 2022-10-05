@@ -8423,7 +8423,8 @@ int main(int argc, char** argv) {
       queue_cycle++;
       current_entry     = 0;
       cur_skipped_paths = 0;
-      queue_cur         = queue;#endif
+      queue_cur         = queue;
+#endif
 
 
 

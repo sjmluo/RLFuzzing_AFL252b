@@ -8397,8 +8397,6 @@ int main(int argc, char** argv) {
     OKF("Modifying queue with RL\n");
     queue_cur = top_rated[(int) current_entry];
     queue_cur = queue;
-    current_entry = 0;
-    cur_skipped_paths = 0;
     while(queue_cur != rl_params->queue_cur) {
       queue_cur = queue_cur->next;
       queue_cycle++;

@@ -8381,9 +8381,7 @@ int main(int argc, char** argv) {
 
     u8 skipped_fuzz;
 
-#ifdef RL_FUZZING
-
-#else
+#ifndef RL_FUZZING
     cull_queue();
 #endif
 

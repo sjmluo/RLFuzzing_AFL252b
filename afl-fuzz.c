@@ -8399,12 +8399,12 @@ int main(int argc, char** argv) {
     queue_cur = queue;
     while(queue_cur != rl_params->queue_cur) {
       queue_cur = queue_cur->next;
-      queue_cycle++;
       current_entry++;
       if(!queue_cur) {
         break;
       }
     }
+    queue_cycle++;
     // if (queue_cur) {
     //   OKF("Setting queue_cur to %d", queue_cur->id);
     //   current_entry = queue_cur->id;

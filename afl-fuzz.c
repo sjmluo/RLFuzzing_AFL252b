@@ -8412,7 +8412,6 @@ int main(int argc, char** argv) {
         break;
       }
     }
-    queue_cur->next = NULL;
     queue_cycle++;
     // if (queue_cur) {
     //   OKF("Setting queue_cur to %d", queue_cur->id);

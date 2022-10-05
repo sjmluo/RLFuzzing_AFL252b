@@ -8382,6 +8382,16 @@ int main(int argc, char** argv) {
     u8 skipped_fuzz;
 
 #ifdef RL_FUZZING
+
+#else
+    cull_queue();
+#endif
+
+    
+
+    if (!queue_cur) {
+      
+#ifdef RL_FUZZING
     if (unlikely(rl_params->map_size != MAP_SIZE)) {
       rl_params->map_size = MAP_SIZE;
 #ifdef PYHTON_RL
@@ -8404,6 +8414,7 @@ int main(int argc, char** argv) {
         break;
       }
     }
+    queue_cur->next = None;
     queue_cycle++;
     // if (queue_cur) {
     //   OKF("Setting queue_cur to %d", queue_cur->id);
@@ -8411,17 +8422,12 @@ int main(int argc, char** argv) {
     // }
 
 #else
-    cull_queue();
-#endif
-
-    
-
-    if (!queue_cur) {
-
       queue_cycle++;
       current_entry     = 0;
       cur_skipped_paths = 0;
-      queue_cur         = queue;
+      queue_cur         = queue;#endif
+
+
 
       while (seek_to) {
         current_entry++;

@@ -8409,6 +8409,9 @@ int main(int argc, char** argv) {
       queue_cur = queue_cur->next;
       current_entry++;
       if(!queue_cur) {
+        current_entry     = 0;
+        cur_skipped_paths = 0;
+        queue_cur         = queue;
         break;
       }
     }
